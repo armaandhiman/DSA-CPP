@@ -1,0 +1,52 @@
+class Node {
+public:
+    int data;
+    Node *left, *right;
+    Node(int val) {
+        data = val;
+        left = right = nullptr;
+    }
+};
+
+
+class INFO
+{ 
+    public:
+
+    int MAX;
+    int MIN;
+    int sz;
+    
+    INFO(int MAX , int MIN , int sz)
+    {
+        this->MAX = MAX;
+        this->MIN = MIN;
+        this->sz = sz;
+    }
+};
+
+class Solution
+{
+    private:
+    
+   INFO  Helper(Node * node)
+   {
+       if(node == nullptr)
+       return INFO(INT_MIN , INT_MAX , 0);
+       
+       auto leftNode = Helper(node->left);
+       auto rightNode = Helper(node->right);
+       
+       if(node->data > leftNode.MAX && node->data < rightNode.MIN)
+       return INFO(max(rightNode.MAX , node->data) , min(leftNode.MIN , node->data),1+leftNode.sz+rightNode.sz);
+   
+       else 
+       return INFO(INT_MAX , INT_MIN , max(leftNode.sz , rightNode.sz));
+   }
+    
+  public:
+    int largestBst(Node *root) {
+       
+       return Helper(root).sz;
+    }
+};
